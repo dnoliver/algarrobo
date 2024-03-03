@@ -1,0 +1,8 @@
+- name: "Install ovs"
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - openvswitch-common
+      - openvswitch-switch
+    state: present
+  become: true

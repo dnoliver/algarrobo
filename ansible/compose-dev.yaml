@@ -1,0 +1,10 @@
+name: ansible
+
+services:
+  app:
+    image: ansible
+    build:
+      context: ./
+    volumes:
+      - ./:/usr/src/app/
+      - ./.ssh/config:/root/.ssh/config

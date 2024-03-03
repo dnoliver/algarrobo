@@ -1,0 +1,14 @@
+name: cloud-init
+
+services:
+  app:
+    image: cloud-init
+    build:
+      context: ./
+    volumes:
+      - ./:/usr/src/app/
+    environment:
+      - CLOUD_INIT_USERNAME=ubuntu
+      - CLOUD_INIT_PASSWORD=ubuntu
+      - CLOUD_INIT_HOSTNAME=ubuntu
+      - SEED_LOCATION=./nfs/seed.iso

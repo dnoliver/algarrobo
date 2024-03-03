@@ -1,0 +1,11 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: $CLOUD_INIT_HOSTNAME
+    password: $CLOUD_INIT_PASSWORD_ENCRYPTED
+    username: $CLOUD_INIT_USERNAME
+  ssh:
+    install-server: true
+    allow-pw: true
+  shutdown: reboot

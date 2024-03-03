@@ -1,0 +1,23 @@
+- name: "Install kvm"
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - bridge-utils
+      - cpu-checker
+      - libvirt-clients
+      - libvirt-daemon
+      - libvirt-daemon-system
+      - qemu
+      - qemu-kvm
+      - virtinst
+      - python3-lxml
+      - guestfs-tools
+    state: present
+  become: true
+
+- name: "Start libvirtd service"
+  ansible.builtin.service:
+    name: libvirtd.service
+    state: started
+    enabled: true
+  become: true

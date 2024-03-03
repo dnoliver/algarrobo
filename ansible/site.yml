@@ -1,0 +1,2 @@
+- name: "Hosts Playbook"
+  import_playbook: hosts.yml

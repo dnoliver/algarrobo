@@ -1,0 +1,45 @@
+- name: "Create wheel group"
+  ansible.builtin.group:
+    name: wheel
+    state: present
+  become: true
+
+- name: "Make wheel sudo"
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: "Set user group"
+  ansible.builtin.user:
+    name: ubuntu
+    group: wheel
+  become: true
+
+- name: "Install hwe kernel"
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - linux-generic-hwe-{{ ansible_distribution_version }}
+    state: present
+  become: true
+
+- name: "Verify reboot required"
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+    get_checksum: false
+  register: reboot_required_file
+  become: true
+
+- name: "Reboot hosts"
+  ansible.builtin.reboot:
+  when: reboot_required_file.stat.exists
+  become: true
+
+- name: "Autoremove dependencies"
+  ansible.builtin.apt:
+    autoremove: true
+  become: true
