@@ -1,0 +1,30 @@
+- name: "Create switch"
+  openvswitch.openvswitch.openvswitch_bridge:
+    bridge: ovsbr
+    state: present
+  become: true
+
+- name: "Create tunnel"
+  openvswitch.openvswitch.openvswitch_port:
+    bridge: ovsbr
+    port: gre0
+    state: present
+    set: "interface gre0 type=gre options:remote_ip={{ tunnel }}"
+  become: true
+
+- name: "Create disk"
+  ansible.builtin.copy:
+    src: vm.qcow2
+    dest: "{{ item }}"
+    owner: root
+    group: root
+  become: true
+  loop: "{{ disks }}"
+
+- name: "Define vm"
+  community.libvirt.virt:
+    command: define
+    xml: "{{ item }}"
+    autostart: true
+  become: true
+  loop: "{{ vms }}"

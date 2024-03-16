@@ -25,8 +25,10 @@ if ((Test-Admin) -eq $false) {
 
 # This script is in two parts. First we declare the variables to be applied.
 
-$vmswitch = "Default Switch" # name of your local vswitch
-$port = "port1" # port on the VM
+$vmswitch1 = "Default Switch" # name of your local vswitch
+$port1 = "port1" # port1 on the VM
+$vmswitch2 = "Private Switch" # name of your private vswitch
+$port2 = "port2" # port2 on the VM
 $cpu = 4 # Number of CPUs
 $ram = 10GB # RAM of VM. Note this is not a string, not in quotation marks
 $disk_path = "$Env:ProgramData\Microsoft\Windows\Virtual Hard Disks\" # Where you want the VM's virtual disk to reside
@@ -58,11 +60,17 @@ Add-VMDvdDrive -VMName $vm -Path $seed
 # Remove the default VM NIC named 'Network Adapter'
 Remove-VMNetworkAdapter -VMName $vm
 
-# Add a new NIC to the VM and set its name
-Add-VMNetworkAdapter -VMName $vm -Name $port
+# Add a new NIC to the VM and set its name, in this case, port1 for Default Switch
+Add-VMNetworkAdapter -VMName $vm -Name $port1
 
-# Connect the NIC to the vswitch
-Connect-VMNetworkAdapter -VMName $vm -Name $port -SwitchName $vmswitch
+# Connect the NIC to the Default Switch
+Connect-VMNetworkAdapter -VMName $vm -Name $port1 -SwitchName $vmswitch1
+
+# Add a new NIC to the VM and set its name, in this case, port2 for Private Switch
+Add-VMNetworkAdapter -VMName $vm -Name $port2
+
+# Connect the NIC to the Private Switch
+Connect-VMNetworkAdapter -VMName $vm -Name $port1 -SwitchName $vmswitch2
 
 # Configure Automatic Start Action to Nothing
 Get-VM -VMName $vm | Set-VM -AutomaticStartAction Nothing

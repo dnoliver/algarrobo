@@ -2,7 +2,7 @@ name: ansible
 
 services:
   app:
-    image: ansible
+    image: algarrobo-ansible
     build:
       context: ./
     volumes:
